@@ -1,0 +1,18 @@
+package-as: NeatPlates
+
+move-folders:
+  NeatPlates/NeatPlatesHub: NeatPlatesHub
+  NeatPlates/NeatPlatesWidgets: NeatPlatesWidgets
+  NeatPlates/NeatPlates: NeatPlates
+  NeatPlates/NeatPlates_Alvara: NeatPlates_Alvara
+  NeatPlates/NeatPlates_BlizzardPlates: NeatPlates_BlizzardPlates
+  NeatPlates/NeatPlates_ClassicPlates: NeatPlates_ClassicPlates
+  NeatPlates/NeatPlates_Graphite: NeatPlates_Graphite
+  NeatPlates/NeatPlates_Grey: NeatPlates_Grey
+  NeatPlates/NeatPlates_Neon: NeatPlates_Neon
+  NeatPlates/NeatPlates_Quatre: NeatPlates_Quatre
+  NeatPlates/NeatPlates_Renaitre: NeatPlates_Renaitre
+  NeatPlates/NeatPlates_Roth: NeatPlates_Roth
+  NeatPlates/NeatPlates_Simple: NeatPlates_Simple
+  NeatPlates/NeatPlates_Slim_Horizontal: NeatPlates_Slim_Horizontal
+  NeatPlates/NeatPlates_Slim_Vertical: NeatPlates_Slim_Vertical
