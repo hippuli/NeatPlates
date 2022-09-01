@@ -1,8 +1,8 @@
 # NeatPlates
 
-## [v412](https://github.com/Luxocracy/NeatPlates/tree/v412) (2022-08-07)
-[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v411...v412) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
+## [V413](https://github.com/Luxocracy/NeatPlates/tree/V413) (2022-08-31)
+[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v412...V413) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
 
-- Missed a part for 'UNIT\_HEALTH\_FREQUENT'  
-- update TOC version  
-- Start using 'UNIT\_HEALTH\_FREQUENT' on classic servers again (Why did they bring this stupid event back...)  
+- Update WOTLK interface verison  
+    - Added option to override target/spotlight opacity like scale has  
+- Minor bug fix  
