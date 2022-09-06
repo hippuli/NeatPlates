@@ -1,8 +1,6 @@
 # NeatPlates
 
-## [V413](https://github.com/Luxocracy/NeatPlates/tree/V413) (2022-08-31)
-[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v412...V413) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
+## [v417](https://github.com/Luxocracy/NeatPlates/tree/v417) (2022-09-03)
+[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v416...v417) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
 
-- Update WOTLK interface verison  
-    - Added option to override target/spotlight opacity like scale has  
-- Minor bug fix  
+- Add Death Knights to tank tracking  
