@@ -16,6 +16,15 @@ copytable = function(original)
 	return duplicate
 end
 
+local tableContains = function(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
+end
+
 NeatPlatesUtility.Colors = {
 	white = "|cFFFFFFFF",
 	yellow = "|cffffff00",
@@ -188,6 +197,7 @@ end
 
 NeatPlatesUtility.abbrevNumber = valueToString
 NeatPlatesUtility.copyTable = copytable
+NeatPlatesUtility.contains = tableContains
 NeatPlatesUtility.mergeTable = mergetable
 NeatPlatesUtility.updateTable = updatetable
 NeatPlatesUtility.HexToRGB = HexToRGB
@@ -345,25 +355,24 @@ local function GetUnitQuestInfo(unit)
 
     	if line > 1 then
 	    	local tooltipText, r, g, b = GetTooltipLineText( line )
-	      local questColor = (b == 0 and r > 0.99 and g > 0.82) -- Note: Quest Name Heading is colored Yellow. (As well as the player on that quest as of 8.2.5)
+	    	local questColor = (r > 0.99 and g > 0.81 and b == 0) -- Note: Quest Name Heading is colored Yellow. (As well as the player on that quest as of 8.2.5)
+			if questColor then
+				questName = tooltipText
+				questList[questName] = questList[questName] or {}
+			elseif questName and objectiveCount > 0 then
+						questList[questName][tooltipText] = questCompleted[#questCompleted+1 - objectiveCount]	-- Quest objective completed?
+						questList[questName]["texture"] = textureIds
 
-	      if questColor then
-	      	questName = tooltipText
-	      	questList[questName] = questList[questName] or {}
-	      elseif questName and objectiveCount > 0 then
-					questList[questName][tooltipText] = questCompleted[#questCompleted+1 - objectiveCount]	-- Quest objective completed?
-					questList[questName]["texture"] = textureIds
-
-					-- Old method for checking quest completion as backup
-					--if questList[questName][tooltipText] == nil then
-					--	local questProgress, questTotal = string.match(tooltipText, "([0-9]+)\/([0-9]+)")
-					--	questProgress = tonumber(questProgress)
-					--	questTotal = tonumber(questTotal)
-					-- 	questList[questName][tooltipText] = not (not (questProgress and questTotal) or (questProgress and questTotal and questProgress < questTotal))
-					-- end
-	      	objectiveCount = objectiveCount - 1 -- Decrease objective Count
-	      end
-      end
+						-- Old method for checking quest completion as backup
+						--if questList[questName][tooltipText] == nil then
+						--	local questProgress, questTotal = string.match(tooltipText, "([0-9]+)\/([0-9]+)")
+						--	questProgress = tonumber(questProgress)
+						--	questTotal = tonumber(questTotal)
+						-- 	questList[questName][tooltipText] = not (not (questProgress and questTotal) or (questProgress and questTotal and questProgress < questTotal))
+						-- end
+				objectiveCount = objectiveCount - 1 -- Decrease objective Count
+			end
+		end
 	  end
 
 	  if questList[UnitName("player")] then

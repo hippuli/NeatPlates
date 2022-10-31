@@ -11,6 +11,7 @@ local pointSpacing = 0
 local artstyle = "Neat"
 local timerFontSize = 8
 local displayTimer = true
+local hideOnEmpty = false
 
 ------------------------------
 -- Debug
@@ -128,7 +129,14 @@ local t = {
         ["GetPower"] = function(self)
             local points = {}
             local maxPoints = UnitPowerMax("player", Enum.PowerType.ComboPoints) or 5
-            currentPoints = GetComboPoints("player", "target")
+            local currentPoints = GetComboPoints("player", "target")
+            local powerType, powerTypeString = UnitPowerType("player");
+
+            -- Don't show if not in cat form
+            -- Note: Maybe still show if there are combopoints available
+            if powerType ~= 3 or (hideOnEmpty and currentPoints == 0) then
+                return nil, nil
+            end
 
             for i = 1, maxPoints do
                 local point = {
@@ -160,6 +168,10 @@ local t = {
                 -- chargedPoints = DebugGetUnitChargedPowerPoints(currentPoints)
             end
 
+            if hideOnEmpty and (currentPoints == 0 or not chargedPoints) then
+                return nil, nil
+            end
+
             for i = 1, maxPoints do
                 local point = {
                     ["ICON"] = getPointIcon(self.POINT, i),
@@ -167,7 +179,7 @@ local t = {
                 }
 
                 -- Set state
-                if chargedPoints and table.contains(chargedPoints, i) then
+                if chargedPoints and NeatPlatesUtility.contains(chargedPoints, i) then
                     if currentPoints >= i then
                         point.STATE = "Charged-On"
                     else
@@ -186,12 +198,16 @@ local t = {
 
 	['MAGE'] = {
 		["POWER"] = Enum.PowerType.ArcaneCharges,
-        ["POINT"] = "Mage-ArcaneCharge"
+        ["POINT"] = "Mage-ArcaneCharge",
+        ["SPEC"] = {62},
+        ["HIDE_ON_EMPTY"] = true
 	},
 
 	['MONK'] = {
 		["POWER"] = Enum.PowerType.Chi,
-        ["POINT"] = "Monk-Chi"
+        ["POINT"] = "Monk-Chi",
+        ["SPEC"] = {269},
+        ["HIDE_ON_EMPTY"] = true
 	},
 
 	['PALADIN'] = {
@@ -225,7 +241,7 @@ local t = {
 
 	['WARLOCK'] = {
 		["POWER"] = Enum.PowerType.SoulShards,
-        ["POINT"] = "Warlock-Shard"
+        ["POINT"] = "Warlock-Shard",
 	},
 };
 
@@ -243,6 +259,10 @@ for class, data in pairs(t) do
             local points = {}
             local maxPoints = UnitPowerMax("player", data["POWER"]) or 5
             local currentPoints = UnitPower("player", data["POWER"])
+
+            if hideOnEmpty and data["HIDE_ON_EMPTY"] and currentPoints == 0 then
+                return nil, nil
+            end
 
             for i = 1, maxPoints do
                 local point = {
@@ -285,10 +305,13 @@ end
 
 local function GetPlayerPower()
     -- TODO: Do checks for if the power should be displayed etc here.
-    if PlayerSpec and PlayerClass then
+    if PlayerClass and PlayerSpec then
         local data = t[PlayerClass]
         if data then
-            return data["GetPower"](t[PlayerClass])
+            local showForSpec = not data["SPEC"] or NeatPlatesUtility.contains(data["SPEC"], PlayerSpec)
+            if showForSpec then
+                return data["GetPower"](data)
+            end
         end
     end
     return nil, nil
@@ -551,6 +574,7 @@ local function SetResourceWidgetOptions(LocalVars)
 	artstyle = LocalVars.WidgetResourceStyle
 	timerFontSize = LocalVars.WidgetResourceTimerFontSize
     displayTimer = LocalVars.WidgetResourceDisplayTimer
+    hideOnEmpty = LocalVars.WidgetResourceHideEmpty
 
 	NeatPlates:ForceUpdate()
 end
