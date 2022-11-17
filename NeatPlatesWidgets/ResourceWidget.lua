@@ -4,6 +4,11 @@ local PlayerClass = select(2, UnitClass("player"))
 local PlayerSpec = 0
 local TimerFont = "FONTS\\ARIALN.TTF"
 
+local validArtStyles = {
+    ["Blizzard"] = true,
+    ["Neat"] = true
+}
+
 ------------------------------
 -- Settings
 ------------------------------
@@ -67,6 +72,7 @@ local t = {
                 [1] = "Blood",
                 [2] = "Frost",
                 [3] = "Unholy",
+                [4] = "Death",
             }
 
             -- Iterate through the runes in the order they appear in the UI
@@ -84,29 +90,32 @@ local t = {
                 }
 
                 local start, duration, runeReady = GetRuneCooldown(i)
-                local expiration = start + duration
-                local runeType = ""
-                if NEATPLATES_IS_CLASSIC_WOTLKC then
-                    runeType = runeMap[GetRuneType(i)]
-                    point.ICON = point.ICON .. "-" .. runeType
-                    point.SWIPE = point.ICON .. "-On"
-                    if runeReady then
-                        point["STATE"] = "On"
-                    else
-                        point["STATE"] = "Off"
-                        point["DURATION"] = duration
-                        point["EXPIRATION"] = expiration
-                    end
-                else
-                    runeType = runeMap[GetSpecialization()]
-                    point.SWIPE = point.ICON .. "-" .. runeType .. "-On"
-                    if runeReady then
+                if runeReady ~= nil then
+                    local expiration = start + duration
+                    local runeType = ""
+                    if NEATPLATES_IS_CLASSIC_WOTLKC then
+                        runeTypeIndex = GetRuneType(i)
+                        runeType = runeMap[runeTypeIndex]
                         point.ICON = point.ICON .. "-" .. runeType
-                        point["STATE"] = "On"
+                        point.SWIPE = point.ICON .. "-On"
+                        if runeReady then
+                            point["STATE"] = "On"
+                        else
+                            point["STATE"] = "Off"
+                            point["DURATION"] = duration
+                            point["EXPIRATION"] = expiration
+                        end
                     else
-                        point["STATE"] = "Off"
-                        point["DURATION"] = duration
-                        point["EXPIRATION"] = expiration
+                        runeType = runeMap[GetSpecialization()]
+                        point.SWIPE = point.ICON .. "-" .. runeType .. "-On"
+                        if runeReady then
+                            point.ICON = point.ICON .. "-" .. runeType
+                            point["STATE"] = "On"
+                        else
+                            point["STATE"] = "Off"
+                            point["DURATION"] = duration
+                            point["EXPIRATION"] = expiration
+                        end
                     end
                 end
                 table.insert(points, point)
@@ -242,6 +251,11 @@ local t = {
 	['WARLOCK'] = {
 		["POWER"] = Enum.PowerType.SoulShards,
         ["POINT"] = "Warlock-Shard",
+	},
+
+    ['EVOKER'] = {
+		["POWER"] = Enum.PowerType.Essence,
+        ["POINT"] = "Evoker-Essence",
 	},
 };
 
@@ -400,7 +414,7 @@ local function CreateResourceIcon(parent, pointData)
 
     if displayTimer then frame.TimeLeft:Show() else frame.TimeLeft:Hide() end
 
-    frame.Expire = ExpireFunction
+    -- frame.Expire = ExpireFunction
     frame.Poll = UpdateWidgetTime
     frame.Name = "NeatPlatesResourceWidget"
     frame:Hide()
@@ -572,7 +586,13 @@ end
 local function SetResourceWidgetOptions(LocalVars)
     pointSpacing = LocalVars.WidgetResourceSpacing
 	artstyle = LocalVars.WidgetResourceStyle
+    if not validArtStyles[artstyle] then
+        artstyle = "Neat"
+    end
 	timerFontSize = LocalVars.WidgetResourceTimerFontSize
+    if timerFontSize == nil or timerFontSize <= 0 then
+        timerFontSize = 8
+    end
     displayTimer = LocalVars.WidgetResourceDisplayTimer
     hideOnEmpty = LocalVars.WidgetResourceHideEmpty
 

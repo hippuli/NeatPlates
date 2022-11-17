@@ -1,6 +1,8 @@
 # NeatPlates
 
-## [v424](https://github.com/Luxocracy/NeatPlates/tree/v424) (2022-10-31)
-[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v423...v424) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
+## [v427](https://github.com/Luxocracy/NeatPlates/tree/v427) (2022-11-16)
+[Full Changelog](https://github.com/Luxocracy/NeatPlates/compare/v426...v427) [Previous Releases](https://github.com/Luxocracy/NeatPlates/releases)
 
-- Fix removal of profile in dragonflight  
+- Locale update  
+- Fix Evoker blizzlike art  
+- Add Evoker to resource widget  
